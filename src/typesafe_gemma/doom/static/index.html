@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Doom · Typed Controls</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Doom typed controls home"
+          ><span class="brand-mark">↗</span> SIMEDW
+          <span class="brand-divider">/</span>
+          <span class="brand-light">DOOM</span></a
+        >
+        <div class="connection">
+          <span id="connection-dot" class="dot"></span
+          ><span id="connection">Connecting</span
+          ><span class="experiment">EXPERIMENT 002</span>
+        </div>
+      </header>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">PIXELS IN. ACTIONS OUT.</p>
+          <h1>A model at the controls.</h1>
+          <p class="subtitle">
+            Play, inspect its decisions, or let Gemma take the wheel.
+          </p>
+        </div>
+        <div class="model-tag">
+          <span class="model-orb">✳</span>
+          <div>
+            <strong>Gemma 4 E2B</strong
+            ><span id="model-status">Loading model…</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="workspace">
+        <section class="game-card">
+          <div class="card-toolbar">
+            <div class="arena">
+              <span class="tiny-label">ARENA</span
+              ><select id="scenario" aria-label="Arena">
+                <option value="defend_the_center">Defend the center</option>
+                <option value="basic">Shooting gallery</option>
+                <option value="deadly_corridor">Deadly corridor</option>
+              </select>
+            </div>
+            <span class="state-badge" id="play-state">PAUSED</span>
+          </div>
+          <div
+            class="viewport"
+            id="viewport"
+            tabindex="0"
+            role="application"
+            aria-label="Doom game. W A S D to move, arrow keys to turn, Space to fire, E to use, Escape to pause."
+          >
+            <canvas id="game" width="640" height="480"></canvas>
+            <div class="viewport-top">
+              <span id="view-label">LIVE VIEW</span
+              ><span id="frame-label">FRAME —</span>
+            </div>
+            <div id="overlay" class="overlay">
+              <div>
+                <span class="overlay-icon">Ⅱ</span>
+                <h2 id="overlay-title">Ready when you are.</h2>
+                <p id="overlay-description">
+                  Press Play to enter the arena, or inspect one model step.
+                </p>
+              </div>
+            </div>
+            <div class="focus-hint" id="focus-hint">
+              Click the game to use your keyboard
+            </div>
+          </div>
+          <div class="game-stats">
+            <div><span>HEALTH</span><strong id="health">—</strong></div>
+            <div><span>AMMO</span><strong id="ammo">—</strong></div>
+            <div><span>KILLS</span><strong id="kills">—</strong></div>
+            <div><span>EPISODE</span><strong id="episode">01</strong></div>
+            <div class="stats-end">
+              <span>GAME TICK</span><strong id="tic">—</strong>
+            </div>
+          </div>
+          <div class="play-controls">
+            <button class="button primary" id="play">▶ Play</button
+            ><button class="button" id="step">↗ Model step</button
+            ><button class="button subtle" id="reset">↺ Reset</button
+            ><button class="button takeover" id="takeover">Take control</button>
+          </div>
+          <div class="keyboard-help">
+            <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span
+            ><span><kbd>←</kbd><kbd>→</kbd> turn</span
+            ><span><kbd>SPACE</kbd> fire</span><span><kbd>E</kbd> use</span
+            ><span><kbd>ESC</kbd> pause</span>
+          </div>
+        </section>
+
+        <aside class="inspector">
+          <section class="panel control-panel">
+            <p class="section-label">WHO'S PLAYING?</p>
+            <div class="mode-tabs" role="group" aria-label="Control mode">
+              <button data-mode="manual" class="active">You</button
+              ><button data-mode="copilot">Copilot</button
+              ><button data-mode="autopilot">Gemma</button>
+            </div>
+            <p id="mode-description" class="muted">
+              Your keyboard controls the game. Gemma is on standby.
+            </p>
+          </section>
+          <section class="panel prediction-panel">
+            <div class="section-heading">
+              <p class="section-label">MODEL DECISION</p>
+              <span id="thinking" class="thinking">STANDBY</span>
+            </div>
+            <div class="latency">
+              <strong id="latency">—</strong
+              ><span>ms <span class="muted">/ decision</span></span
+              ><span id="decision-frame" class="decision-frame"
+                >No observation yet</span
+              >
+            </div>
+            <div class="action-list" id="actions"></div>
+            <details class="json-details">
+              <summary>Typed output <span>{ }</span></summary>
+              <pre id="json">Waiting for the first observation.</pre>
+            </details>
+            <p class="fine-print">
+              Bars show scores among allowed answers, not calibrated confidence.
+            </p>
+          </section>
+          <section class="panel applied-panel">
+            <p class="section-label">CONTROLS APPLIED NOW</p>
+            <div id="applied" class="applied">No buttons pressed</div>
+          </section>
+          <section class="panel settings-panel">
+            <div class="setting">
+              <label for="hz"
+                >Decision rate <span class="muted">target</span></label
+              ><output id="hz-value">5 / sec</output>
+            </div>
+            <input id="hz" type="range" min="1" max="10" step="1" value="5" />
+            <div class="setting step-setting">
+              <label for="tics">Single step</label
+              ><select id="tics">
+                <option value="1">1 tick</option>
+                <option value="4" selected>4 ticks</option>
+                <option value="8">8 ticks</option>
+                <option value="12">12 ticks</option>
+              </select>
+            </div>
+          </section>
+        </aside>
+      </div>
+      <footer>
+        <span class="footer-event"
+          ><span class="dot"></span
+          ><span id="event">Starting the arena…</span></span
+        ><span>Vision → shared cache → typed controls</span>
+      </footer>
+      <div id="toast" role="alert" hidden></div>
+    </main>
+  </body>
+</html>

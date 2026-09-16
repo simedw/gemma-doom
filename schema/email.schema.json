@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmailClassification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["spam", "category"],
+  "properties": {
+    "spam": { "type": "boolean" },
+    "category": {
+      "type": "string",
+      "enum": ["personal", "work", "outreach", "automatic_response", "newsletter", "transactional", "other"]
+    }
+  }
+}
